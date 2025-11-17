@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* posisi icon acak sekitar button */
+.floating-icon {
+  position: absolute;
+  font-size: 1.4rem;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: float 3s ease-in-out infinite;
+}
+
+/* random spread area */
+.floating-icon:nth-child(1) {
+  top: -10px;
+  left: 10%;
+  animation-delay: 0s;
+}
+.floating-icon:nth-child(2) {
+  top: 50%;
+  left: -10px;
+  animation-delay: 0.3s;
+}
+.floating-icon:nth-child(3) {
+  top: 110%;
+  left: 35%;
+  animation-delay: 0.6s;
+}
+.floating-icon:nth-child(4) {
+  top: 20%;
+  right: -10px;
+  animation-delay: 0.9s;
+}
+.floating-icon:nth-child(5) {
+  top: 80%;
+  right: -20px;
+  animation-delay: 1.2s;
+}
+
+/* ANIMASI FADE + FLOAT */
+@keyframes float {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.5);
+  }
+}
+
+/* icon aktif hanya saat hover */
+button:hover .floating-icon {
+  opacity: 1;
+}

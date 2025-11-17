@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday 🎉</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Cursor Follower */
+      #follower {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.8) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        filter: blur(8px);
+        mix-blend-mode: screen;
+      }
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .animated-bg {
+        background: linear-gradient(-45deg, #0a0a0a, #1b1b1b, #121010, #252525);
+        background-size: 400% 400%;
+        animation: gradientMove 12s ease infinite;
+      }
+      /* Red moving blur line */
+      .red-line {
+        position: absolute;
+        top: -40%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 80%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 60, 60, 0.35) 0%,
+          rgba(255, 0, 0, 0) 70%
+        );
+        filter: blur(35px);
+        animation: redMove 3s linear infinite;
+        pointer-events: none;
+      }
+      @keyframes redMove {
+        0% {
+          transform: translate(-50%, -50%);
+        }
+        50% {
+          transform: translate(-50%, 120vh);
+        }
+        100% {
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      .animate-love1 {
+        animation: loveFloat 1.2s ease-out forwards;
+      }
+      .animate-love2 {
+        animation: loveFloat2 1.2s ease-out forwards;
+      }
+      .animate-love3 {
+        animation: loveFloat3 1.2s ease-out forwards;
+      }
+
+      @keyframes loveFloat {
+        0% {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-120%, -180%) scale(1.5);
+          opacity: 0;
+        }
+      }
+      @keyframes loveFloat2 {
+        0% {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(40%, -160%) scale(1.3);
+          opacity: 0;
+        }
+      }
+      @keyframes loveFloat3 {
+        0% {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-10%, -200%) scale(1.4);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="min-h-screen flex flex-col items-center justify-center animated-bg text-white relative overflow-hidden"
+  >
+    <audio
+      id="birthdaySong"
+      src="src/song/Caramelldansen - Speed Up - p4rfecti0.mp3"
+    ></audio>
+    <!-- MAIN CONTENT (ISI LAMA) -->
+    <div id="mainContent" class="transition-all duration-700 text-center px-4">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">
+        Happy Birthday Aurora Immanuela! 🎂✨
+      </h1>
+
+      <p class="text-lg md:text-2xl max-w-xl mx-auto opacity-80">
+        Selamat ulang tahun yang ke 18 (bocil bgt dah)
+      </p>
+
+      <div class="mt-8 relative">
+        <button
+          id="birthdayBtn"
+          class="relative group px-6 py-3 bg-pink-400/20 backdrop-blur-xl border border-pink-300/30 rounded-xl text-white font-semibold transition-all duration-300 shadow-lg hover:bg-pink-500 overflow-visible"
+        >
+          Klik ini coba 🎁
+
+          <!-- Floating Icons -->
+          <span class="pointer-events-none absolute inset-0">
+            <span class="floating-icon text-pink-400">❤️</span>
+            <span class="floating-icon text-pink-300">🎉</span>
+            <span class="floating-icon text-pink-200">💖</span>
+            <span class="floating-icon text-pink-300">✨</span>
+            <span class="floating-icon text-pink-400">💘</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BIRTHDAY SCREEN -->
+    <div
+      id="birthdayScreen"
+      class="hidden opacity-0 fixed inset-0 flex flex-col items-center justify-center text-white transition-all duration-700"
+    >
+      <img
+        id="cakeImage"
+        src="src/img/kueNyala.png"
+        class="w-60 mb-6 transition-all duration-700"
+      />
+
+      <h2 class="text-3xl font-semibold mb-2">Tiup setelah:</h2>
+      <div id="countdown" class="text-5xl font-bold">10</div>
+    </div>
+
+    <h1 id="bigText" class="text-center text-white"></h1>
+
+    <!-- FOLLOWER & RED LINE -->
+    <div id="follower"></div>
+    <div class="red-line"></div>
+
+    <!-- STYLE -->
+    <style>
+      /* Floating icon positions */
+      .floating-icon {
+        position: absolute;
+        font-size: 1.4rem;
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      .floating-icon:nth-child(1) {
+        top: -10px;
+        left: 10%;
+      }
+      .floating-icon:nth-child(2) {
+        top: 50%;
+        left: -10px;
+      }
+      .floating-icon:nth-child(3) {
+        top: 110%;
+        left: 35%;
+      }
+      .floating-icon:nth-child(4) {
+        top: 20%;
+        right: -10px;
+      }
+      .floating-icon:nth-child(5) {
+        top: 80%;
+        right: -20px;
+      }
+
+      button:hover .floating-icon {
+        animation: float 3s ease-in-out infinite;
+        opacity: 1;
+      }
+
+      @keyframes float {
+        0% {
+          opacity: 0;
+          transform: translateY(10px) scale(0.5);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-10px) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(10px) scale(0.5);
+        }
+      }
+
+      /* PARTY BACKGROUND */
+      .party-bg {
+        animation: partyColors 2s infinite alternate;
+        background-size: 300% 300%;
+      }
+
+      @keyframes partyColors {
+        0% {
+          background: linear-gradient(120deg, #ff4d6d, #ffb3c6);
+        }
+        20% {
+          background: linear-gradient(120deg, #ffde59, #ff914d);
+        }
+        40% {
+          background: linear-gradient(120deg, #8cff66, #3cffd0);
+        }
+        60% {
+          background: linear-gradient(120deg, #6ea8ff, #b388ff);
+        }
+        80% {
+          background: linear-gradient(120deg, #ff6ec7, #ff3f7f);
+        }
+        100% {
+          background: linear-gradient(120deg, #ff4d4d, #ffcc00);
+        }
+      }
+
+      /* GIF muncul random */
+      .party-gif {
+        position: absolute;
+        width: 120px;
+        animation: popIn 0.8s ease forwards;
+        opacity: 0;
+      }
+
+      /* Animasi gif muncul */
+      @keyframes popIn {
+        0% {
+          transform: scale(0.2) rotate(-10deg);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+      }
+
+      /* Animasi bigTextPulse */
+      @keyframes bigTextPulseDesktop {
+        0% {
+          transform: translateX(-50%) scale(1);
+        }
+        25% {
+          transform: translateX(-50%) scale(1.1);
+        }
+        50% {
+          transform: translateX(-50%) scale(0.9);
+        }
+        75% {
+          transform: translateX(-50%) scale(1.05);
+        }
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      @keyframes bigTextPulseTablet {
+        0% {
+          transform: translateX(-50%) scale(1);
+        }
+        25% {
+          transform: translateX(-50%) scale(1.08);
+        }
+        50% {
+          transform: translateX(-50%) scale(0.95);
+        }
+        75% {
+          transform: translateX(-50%) scale(1.03);
+        }
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      @keyframes bigTextPulseMobile {
+        0% {
+          transform: translateX(-50%) scale(1);
+        }
+        25% {
+          transform: translateX(-50%) scale(1.05);
+        }
+        50% {
+          transform: translateX(-50%) scale(0.95);
+        }
+        75% {
+          transform: translateX(-50%) scale(1.02);
+        }
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      #bigText {
+        position: absolute;
+        left: 50%;
+        opacity: 0;
+        text-align: center;
+        white-space: nowrap;
+        font-weight: 500;
+        top: 5%;
+        font-size: 3.5rem;
+        animation: bigTextPulseDesktop 1s ease-in-out infinite;
+      }
+
+      /* HP */
+      @media (max-width: 640px) {
+        #bigText {
+          font-size: 1.5rem;
+          top: 8%;
+          animation: bigTextPulseMobile 1s ease-in-out infinite;
+        }
+      }
+
+      /* Tablet */
+      @media (min-width: 641px) and (max-width: 1024px) {
+        #bigText {
+          font-size: 2.5rem;
+          top: 6%;
+          animation: bigTextPulseTablet 1s ease-in-out infinite;
+        }
+      }
+
+      /* Desktop */
+      @media (min-width: 1025px) {
+        #bigText {
+          font-size: 3.5rem;
+          top: 5%;
+          animation: bigTextPulseDesktop 1s ease-in-out infinite;
+        }
+      }
+
+      @keyframes bigPop {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .flash-burst {
+        position: fixed;
+        inset: 0;
+        background: rgb(0, 0, 0);
+        opacity: 0;
+        pointer-events: none;
+        animation: flashBurst 0.3s ease forwards;
+      }
+
+      @keyframes flashBurst {
+        0% {
+          opacity: 0;
+        }
+        20% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+    </style>
+
+    <style>
+      /* ========================= */
+      /*      RESPONSIVE MODE      */
+      /* ========================= */
+
+      /* --- HP (max-width: 480px) --- */
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.8rem !important;
+        }
+
+        #birthdayBtn {
+          padding: 10px 18px !important;
+          font-size: 0.9rem !important;
+        }
+
+        #cakeImage {
+          width: 150px !important;
+        }
+
+        #countdown {
+          font-size: 3rem !important;
+        }
+
+        #bigText {
+          top: 8%;
+          font-size: 1.8rem !important;
+          transform: translateX(-50%) scale(0.9);
+          white-space: normal;
+          width: 90%;
+          text-align: center;
+        }
+
+        .party-gif,
+        .animate-gif-pop,
+        .w-40 {
+          width: 80px !important;
+        }
+      }
+
+      /* --- Tablet (481px – 768px) --- */
+      @media (min-width: 481px) and (max-width: 768px) {
+        h1 {
+          font-size: 2.4rem !important;
+        }
+
+        #birthdayBtn {
+          padding: 12px 24px !important;
+          font-size: 1rem !important;
+        }
+
+        #cakeImage {
+          width: 200px !important;
+        }
+
+        #countdown {
+          font-size: 4rem !important;
+        }
+
+        #bigText {
+          top: 6%;
+          font-size: 2.4rem !important;
+          transform: translateX(-50%) scale(1);
+          text-align: center;
+        }
+
+        .party-gif {
+          width: 100px !important;
+        }
+      }
+
+      /* --- Desktop (769px+) --- */
+      @media (min-width: 769px) {
+        #bigText {
+          font-size: 3.5rem !important;
+        }
+
+        #cakeImage {
+          width: 240px !important;
+        }
+
+        #countdown {
+          font-size: 5rem !important;
+        }
+      }
+
+      .party-gif-bottom {
+        position: fixed;
+        width: 200px; /* responsive size */
+        opacity: 0;
+        transform: translateY(10px) scale(0.8);
+        transition: all 0.6s ease;
+        z-index: 50;
+      }
+
+      @media (max-width: 768px) {
+        .party-gif-bottom {
+          width: 180px; /* HP */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .party-gif-bottom {
+          width: 150px; /* HP kecil */
+        }
+      }
+
+      /* CONFETTI */
+      .confetti {
+        position: fixed;
+        top: -20px;
+        width: 12px;
+        height: 18px;
+        background: hsl(calc(360 * var(--i)), 90%, 60%);
+        opacity: 1;
+        animation: confettiFall 4.5s linear forwards;
+        transform: rotate(15deg);
+        border-radius: 3px;
+        z-index: 9999 !important; /* BIAR DI ATAS SEMUA */
+      }
+
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(130vh) rotate(360deg);
+        }
+      }
+
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(110vh) rotate(360deg);
+        }
+      }
+
+      /* FLASH GLOW */
+      .flash-glow {
+        position: fixed;
+        inset: 0;
+        background: white;
+        opacity: 0.8;
+        animation: flashFade 0.3s ease-out forwards;
+        pointer-events: none;
+      }
+
+      @keyframes flashFade {
+        0% {
+          opacity: 0.8;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* SPARKLES */
+      .sparkle {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: radial-gradient(circle, white, transparent);
+        border-radius: 50%;
+        animation: sparklePop 1.5s ease-out forwards;
+        opacity: 0;
+      }
+
+      @keyframes sparklePop {
+        0% {
+          opacity: 0;
+          transform: scale(0.2);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.3);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+      }
+    </style>
+
+    <script>
+      const btn = document.getElementById("birthdayBtn");
+      const mainContent = document.getElementById("mainContent");
+      const birthdayScreen = document.getElementById("birthdayScreen");
+      const cakeImage = document.getElementById("cakeImage");
+
+      const bigText = document.createElement("div");
+      bigText.id = "bigText";
+      bigText.className =
+        "fixed top-10 text-5xl font-extrabold opacity-0 transition-all duration-700 text-white tracking-wide";
+      document.body.appendChild(bigText);
+
+      const gifs = [
+        "src/img/wioppi-wioppi-dance.gif",
+        "src/img/cute-pug.gif",
+        "src/img/deal-with-it-trailblazer.gif",
+        "src/img/foxy-foxplushy.gif",
+        "src/img/gorrila-dancing.gif",
+        "src/img/bretta-n-jonny-dancing.gif",
+        "src/img/rat-dancing-meme.gif",
+        "src/img/valorant-clove.gif",
+        "src/img/cat-meme-cat.gif",
+        "src/img/skill-issue-chika-dance.gif",
+      ];
+
+      function spawnRandomGifs() {
+        const img = document.createElement("img");
+        img.src = gifs[Math.floor(Math.random() * gifs.length)];
+        img.className = "party-gif-bottom";
+
+        img.style.left = Math.random() * 80 + "vw";
+        img.style.bottom = "-20px";
+
+        document.body.appendChild(img);
+
+        setTimeout(() => {
+          img.style.opacity = 1;
+          img.style.transform = "translateY(-20px) scale(1)";
+        }, 50);
+
+        setTimeout(() => img.remove(), 4000);
+
+        setTimeout(spawnRandomGifs, 800);
+      }
+
+      // FLASH
+      function flashBurst() {
+        const f = document.createElement("div");
+        f.className = "flash-glow";
+        document.body.appendChild(f);
+      }
+
+      // CONFETTI
+      function dropConfettiLoop() {
+        const interval = setInterval(() => {
+          for (let i = 0; i < 25; i++) {
+            const c = document.createElement("div");
+            c.className = "confetti";
+            c.style.left = Math.random() * 100 + "vw";
+            c.style.setProperty("--i", Math.random());
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 5000);
+          }
+        }, 400);
+
+        setTimeout(() => clearInterval(interval), 3000);
+      }
+
+      // SPARKLE TERUS
+      function sparkleLoop() {
+        setInterval(() => {
+          for (let i = 0; i < 12; i++) {
+            const s = document.createElement("div");
+            s.className = "sparkle";
+
+            s.style.left = Math.random() * 100 + "vw";
+            s.style.top = Math.random() * 100 + "vh";
+            s.style.animationDelay = Math.random() * 0.4 + "s";
+
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 2000);
+          }
+        }, 350);
+      }
+
+      btn.addEventListener("click", () => {
+        mainContent.classList.add("opacity-0");
+
+        setTimeout(() => {
+          mainContent.classList.add("hidden");
+          document.body.style.background = "#ff7ebf";
+
+          birthdayScreen.classList.remove("hidden");
+
+          setTimeout(() => {
+            birthdayScreen.classList.remove("opacity-0");
+          }, 50);
+        }, 700);
+
+        let counter = 10;
+        const countdownText = document.getElementById("countdown");
+
+        const interval = setInterval(() => {
+          countdownText.textContent = counter;
+          counter--;
+
+          if (counter < 0) {
+            clearInterval(interval);
+
+            cakeImage.src = "src/img/kueMati.png";
+
+            // PLAY AUDIO
+            const song = document.getElementById("birthdaySong");
+            song.volume = 0.7;
+            song.play();
+
+            // 🔥 FLASH — HANYA DI SINI
+            flashBurst();
+            setTimeout(() => {
+              setInterval(flashBurst, 300); // setiap 0.6 detik flash muncul terus
+            }, 13000); // delay 3 detik
+
+            // Confetti
+            dropConfettiLoop();
+
+            // Sparkles
+            sparkleLoop();
+
+            // Ganti background party
+            document.body.style.background = "";
+            document.body.classList.add("party-bg");
+
+            // GIF bawah
+            spawnRandomGifs();
+
+            // TULISAN BESAR
+            bigText.textContent = "HAPPY BIRTHDAY LIM!";
+            bigText.style.opacity = "1";
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
